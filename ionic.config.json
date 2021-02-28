@@ -1,0 +1,7 @@
+{
+  "name": "auto",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
