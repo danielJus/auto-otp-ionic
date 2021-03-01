@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,10 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
-
-  constructor() { }
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {
+    this.modalCtrl.dismiss();
   }
-
 }

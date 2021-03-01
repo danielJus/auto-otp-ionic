@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SignupService } from '../services/signup.service';
 import { SmsRetriever } from '@ionic-native/sms-retriever/ngx';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { OtpModalComponent } from '../otp-modal/otp-modal.component';
 
 @Component({
   selector: 'app-signup',
@@ -10,53 +12,60 @@ import { Router } from '@angular/router';
 })
 export class SignupPage implements OnInit {
   hash: any;
+
+  phone = '';
   constructor(
     private signupService: SignupService,
     private smsRetriever: SmsRetriever,
-    private router: Router
+    private router: Router,
+    private modalCtrl: ModalController
   ) {}
 
   ngOnInit() {}
 
   genHash() {
-    // This function is to get hash string of APP.
-    // * @return {Promise<string>} Returns a promise that resolves when successfully generate hash of APP.
+    this.openModal();
 
-    // this.signupService
-    //   .getOtpMessage('198237idjs')
-    //   .subscribe((val) => console.log(val));
     this.smsRetriever
       .getAppHash()
       .then((res: any) => {
-        console.log(res);
         this.hash = res;
-        this.signupService.getOtpMessage(this.hash).subscribe((val) => {
-          alert(this.hash);
-          console.log(val);
-
-          if (val.message === 'success') {
-            this.retriveSMS();
-          }
-        });
+        this.signupService
+          .getOtpMessage(this.hash, this.phone)
+          .subscribe((val) => {
+            if (val.message === 'success') {
+              this.retriveSMS();
+            }
+          });
       })
       .catch((error: any) => console.error(error));
   }
 
+  async openModal() {
+    const modal = await this.modalCtrl.create({
+      component: OtpModalComponent,
+      cssClass: 'half-screen',
+      backdropDismiss: false,
+    });
+    return await modal.present();
+  }
+
   retriveSMS() {
-    console.log('Watching SMS');
     this.smsRetriever
       .startWatching()
       .then((res: any) => {
         console.log(res);
-        //  <#> 323741 is your 6 digit OTP for MyApp. LDQEGVDEvcl
-        const otp = res.Message.toString().substr(4, 6);
-        this.signupService.validateOtp(otp).subscribe((val) => {
+        const receivedOtp = res.Message.toString()
+          .split(' ')
+          .filter((item) => item === '323741')[0];
+        this.signupService.validateOtp(receivedOtp).subscribe((val) => {
           if (val.message === 'success') {
-            this.router.navigateByUrl('/dashboard');
+            this.signupService.setOtpValues(receivedOtp);
+            this.signupService.isOtpValidSubject.next(true);
+            //this.router.navigateByUrl('/dashboard');
           } else {
             alert(`Wrong OTP`);
           }
-          alert(`OTP Received - ${otp}`);
         });
       })
       .catch((error: any) => console.error(error));
