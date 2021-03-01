@@ -12,12 +12,11 @@ import { OtpModalComponent } from '../otp-modal/otp-modal.component';
 })
 export class SignupPage implements OnInit {
   hash: any;
-
   phone = '';
+
   constructor(
     private signupService: SignupService,
     private smsRetriever: SmsRetriever,
-    private router: Router,
     private modalCtrl: ModalController
   ) {}
 
@@ -62,7 +61,6 @@ export class SignupPage implements OnInit {
           if (val.message === 'success') {
             this.signupService.setOtpValues(receivedOtp);
             this.signupService.isOtpValidSubject.next(true);
-            //this.router.navigateByUrl('/dashboard');
           } else {
             alert(`Wrong OTP`);
           }

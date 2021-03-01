@@ -1,14 +1,16 @@
 <ion-content>
-  <ion-item>
-    <ion-label position="stacked">Ingresa tu número de celular</ion-label>
-    <ion-input
-      [(ngModel)]="phone"
-      type="tel"
-      placeholder="Ej:6571-5243"
-    ></ion-input>
-  </ion-item>
+  <div class="container">
+    <ion-item>
+      <ion-label position="stacked">Ingresa tu número de celular</ion-label>
+      <ion-input
+        [(ngModel)]="phone"
+        type="tel"
+        placeholder="Ej:6571-5243"
+      ></ion-input>
+    </ion-item>
 
-  <ion-button (click)="genHash()" expand="block" fill="clear" shape="round">
-    Continuar
-  </ion-button>
+    <ion-button (click)="genHash()" expand="block" fill="clear" shape="round">
+      Continuar
+    </ion-button>
+  </div>
 </ion-content>

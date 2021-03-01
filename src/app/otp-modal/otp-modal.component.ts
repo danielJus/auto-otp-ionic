@@ -10,6 +10,7 @@ import { SignupService } from '../services/signup.service';
 })
 export class OtpModalComponent implements OnInit {
   form: FormGroup;
+  inputs = ['otp1', 'otp2', 'otp3', 'otp4', 'otp5', 'otp6'];
 
   constructor(
     private signupService: SignupService,
@@ -33,7 +34,7 @@ export class OtpModalComponent implements OnInit {
         this.form.setValue(successfulOtp);
         setTimeout(() => {
           this.router.navigateByUrl('/dashboard');
-        }, 1000);
+        }, 2000);
       }
     });
   }
