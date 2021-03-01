@@ -3,11 +3,7 @@
     <ion-grid class="shadow-high" fixed>
       <form [formGroup]="form">
         <ion-row class="ion-justify-content-center">
-          <ion-col
-            [class.sucess]="wasSuccessful === true"
-            *ngFor="let item of inputs"
-            size="1"
-          >
+          <ion-col *ngFor="let item of inputs" size="1">
             <ion-input
               type="tel"
               placeholder="0"
