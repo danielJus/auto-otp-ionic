@@ -10,6 +10,7 @@ import { SignupService } from '../services/signup.service';
 })
 export class OtpModalComponent implements OnInit {
   form: FormGroup;
+  wasSuccessful = false;
   inputs = ['otp1', 'otp2', 'otp3', 'otp4', 'otp5', 'otp6'];
 
   constructor(
@@ -30,6 +31,7 @@ export class OtpModalComponent implements OnInit {
   ngOnInit() {
     this.signupService.isOtpValidSubject.subscribe((val) => {
       if (val) {
+        this.wasSuccessful = true;
         const successfulOtp = this.signupService.getOtpValues();
         this.form.setValue(successfulOtp);
         setTimeout(() => {
