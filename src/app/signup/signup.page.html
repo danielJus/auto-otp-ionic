@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>signup</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="stacked">Ingresa tu número de celular</ion-label>
+    <ion-input type="tel" placeholder="Ej:6571-5243"></ion-input>
+  </ion-item>
+
+  <ion-button (click)="genHash()" expand="block" fill="clear" shape="round">
+    Continuar
+  </ion-button>
+</ion-content>
