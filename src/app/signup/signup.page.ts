@@ -22,22 +22,21 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {}
 
-  genHash() {
-    this.openModal();
-
-    this.smsRetriever
-      .getAppHash()
-      .then((res: any) => {
-        this.hash = res;
-        this.signupService
-          .getOtpMessage(this.hash, this.phone)
-          .subscribe((val) => {
-            if (val.message === 'success') {
-              this.retriveSMS();
-            }
-          });
-      })
-      .catch((error: any) => console.error(error));
+  async generateHash() {
+    try {
+      const appHash = await this.smsRetriever.getAppHash();
+      this.hash = appHash;
+      this.signupService
+        .getOtpMessage(this.hash, this.phone)
+        .subscribe((response) => {
+          if (response.message === 'success') {
+            this.openModal();
+            this.retriveSMS();
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async openModal() {
@@ -49,23 +48,23 @@ export class SignupPage implements OnInit {
     return await modal.present();
   }
 
-  retriveSMS() {
-    this.smsRetriever
-      .startWatching()
-      .then((res: any) => {
-        console.log(res);
-        const receivedOtp = res.Message.toString()
-          .split(' ')
-          .filter((item) => item === '323741')[0];
-        this.signupService.validateOtp(receivedOtp).subscribe((val) => {
-          if (val.message === 'success') {
-            this.signupService.setOtpValues(receivedOtp);
-            this.signupService.isOtpValidSubject.next(true);
-          } else {
-            alert(`Wrong OTP`);
-          }
-        });
-      })
-      .catch((error: any) => console.error(error));
+  async retriveSMS() {
+    try {
+      const response: any = await this.smsRetriever.startWatching();
+      const receivedOtp = response.Message.toString()
+        .split(' ')
+        .filter((item) => item === '323741')[0];
+
+      this.signupService.validateOtp(receivedOtp).subscribe((val) => {
+        if (val.message === 'success') {
+          this.signupService.setOtpValues(receivedOtp);
+          this.signupService.isOtpValidSubject.next(true);
+        } else {
+          alert(`Wrong OTP`);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
