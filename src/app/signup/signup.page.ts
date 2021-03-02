@@ -24,13 +24,13 @@ export class SignupPage implements OnInit {
 
   async generateHash() {
     try {
+      this.openModal();
       const appHash = await this.smsRetriever.getAppHash();
       this.hash = appHash;
       this.signupService
         .getOtpMessage(this.hash, this.phone)
         .subscribe((response) => {
           if (response.message === 'success') {
-            this.openModal();
             this.retriveSMS();
           }
         });

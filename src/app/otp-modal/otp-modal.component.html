@@ -1,6 +1,6 @@
 <ion-content>
-  <div class="container">
-    <ion-grid class="shadow-high" fixed>
+  <div class="inputs">
+    <ion-grid [class.shadow-green]="form.valid" class="shadow-high" fixed>
       <form [formGroup]="form">
         <ion-row class="ion-justify-content-center">
           <ion-col *ngFor="let item of inputs" size="1">
@@ -13,5 +13,11 @@
         </ion-row>
       </form>
     </ion-grid>
+  </div>
+
+  <div class="continue">
+    <h3 *ngIf="!form.valid">Esperando SMS...</h3>
+
+    <h3 *ngIf="form.valid">Bienvenido 🔥</h3>
   </div>
 </ion-content>
